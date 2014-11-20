@@ -1,22 +1,43 @@
 <!DOCTYPE html>
-<html ng-app="main">
+<html ng-app="application">
 <head>
     <meta charset="utf-8">
     <title>Inspir3 - Dépense</title>
     <script src="../../lib/angular-1.3.2.min.js"></script>
-    <script src="depense/main.js"></script>
+    <script src="depense/application.js"></script>
+    <script src="depense/modele.js"></script>
+    <script src="persistance.js"></script>
 </head>
 <body>
 
-    <h1>App dépenses</h1>
+    <h1>Application dépenses</h1>
     
-    <div ng-controller="DepenseController">
+    <div ng-controller="DepenseControleur">
       
         <form ng-submit="ajouterDepense()">
-        <input type="text" ng-model="description" size="30" placeholder="Description">
-        <input type="text" ng-model="montant" size="6" placeholder="Montant">
-        <input class="btn-primary" type="submit" value="Ajouter">
-      </form>        
+            <input type="text" ng-model="description" size="50" placeholder="Description">
+            <input type="text" ng-model="achat" size="16" placeholder="Montant d'achat">
+            <input type="text" ng-model="vente" size="16" placeholder="Montant de vente">
+            <input type="text" ng-model="poids" size="6" placeholder="Poids">
+        
+            <input class="btn-primary" type="submit" value="Ajouter">
+        </form>   
+        
+        <hr>
+        
+        <table>
+            <thead>
+                <tr>
+                    <th>Description</th><th>Achat</th><th>Vente</th><th>Poids</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr ng-repeat="depense in depenses">
+                    <td>{{depense.description}}</td><td>{{depense.achat}}</td><td>{{depense.vente}}</td><td>{{depense.poids}}</td>
+                </tr>
+            </tbody>
+        </table>
+                  
     </div>    
     
 </body>
