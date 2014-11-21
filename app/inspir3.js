@@ -1,6 +1,6 @@
-var persistance = angular.module('persistance', []);
+var m = angular.module('inspir3', []);
 
-persistance.factory('service', ['$http', function($http) {
+m.factory('persistance', ['$http', function($http) {
 
     var url = 'http://regis.baril.free.fr/data.php5?callback=JSON_CALLBACK';
     var application = 'depense';
@@ -11,11 +11,11 @@ persistance.factory('service', ['$http', function($http) {
     var sauvegarder = function(Fichier, Donnees) {
     
         $http.jsonp(url, { params: {
-                                    application: application, 
-                                    action: 'sauvegarder', 
-                                    fichier: Fichier, 
-                                    donnees: Donnees
-                                  } 
+                                application: application, 
+                                action: 'sauvegarder', 
+                                fichier: Fichier
+                            },
+                            data: Donnees
                          }).
             success(function(data) {
                 console.log('Données: ' + data);
