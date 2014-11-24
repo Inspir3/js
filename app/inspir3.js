@@ -2,8 +2,6 @@ var m = angular.module('inspir3', []);
 
 m.factory('persistance', ['$http', function($http) {
 
-    //var url = 'http://regis.baril.free.fr/data.php5?callback=JSON_CALLBACK';
-    
     var url = 'http://www.inspir3.org/php/data.php?callback=JSON_CALLBACK';
         
     var application = 'depense';
