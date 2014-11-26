@@ -11,7 +11,7 @@ m.factory('persistance', ['$http', function($http) {
     /*
      * 
      */    
-    var sauvegarder = function(Fichier, Donnees) {
+    var sauvegarder = function(Fichier, Donnees, Callback) {
     
         $http.jsonp(url, { params: {
                                 application: application, 
@@ -20,11 +20,12 @@ m.factory('persistance', ['$http', function($http) {
                                 donnees: Donnees
                             }
                          }).
-            success(function(data) {
-                console.log('Données: ' + data);
+            success(function() {
+                Callback();
             }).
-            error(function(data) {
-                console.log('[Erreur] ' + data);
+            error(function(Data) {
+                console.log('[Erreur] ' + Data);
+                Callback();
             });
         
     }
@@ -40,13 +41,12 @@ m.factory('persistance', ['$http', function($http) {
                                         fichier: Fichier 
                                         }
                                     }).
-            success(function(data) {
-                console.log(data);
-            
-                Callback(data);
+            success(function(Data) {
+                Callback(Data);
             }).
-            error(function(data) {
-                console.log('[Erreur] ' + data);
+            error(function(Data) {
+                console.log('[Erreur] ' + Data);
+                Callback();
             });
     }    
 
