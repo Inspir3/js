@@ -2,13 +2,30 @@ var m = angular.module('application', ['inspir3']);
 
 m.controller('DepenseControleur', ['$scope', 'depense', 'persistance', function($scope, depense, persistance) {
         
-    //$scope.depenses = [ {id: 1, description: 'aileron', achat: 220, vente: 190, poids: 438} ];
     $scope.depenses = [];
+    
+    /*
+     * 
+     */
+    var totaux = function(){
+        
+        $scope.totalAchat = 0;
+        $scope.totalVente = 0;
+        
+        for(var i=0;i<$scope.depenses.length;i++){  
+            $scope.totalAchat += parseFloat($scope.depenses[i].achat);
+            $scope.totalVente += parseFloat($scope.depenses[i].vente);
+        }
+        
+        $scope.difference = $scope.totalAchat - $scope.totalVente;
+        $scope.perte = ($scope.totalAchat / $scope.totalVente - 1)*100;
+    }
     
     persistance.charger('data', function (Data){
         
        $scope.depenses = Data; 
-        
+       
+        totaux();
     });
     
     /*
@@ -56,9 +73,11 @@ m.controller('DepenseControleur', ['$scope', 'depense', 'persistance', function(
     $scope.ajouter = function() {
         console.log('ajouter()');
              
-        $scope.depenses.push(depense.creer(idSuivant(), $scope.description, $scope.achat, $scope.vente, $scope.poids));
+        $scope.depenses.push(depense.creer(idSuivant(), $scope.date, $scope.description, $scope.achat, $scope.vente, $scope.poids));
         
-        sauver();
+        totaux();
+        
+        sauver();        
     }
     
     /*
@@ -72,6 +91,8 @@ m.controller('DepenseControleur', ['$scope', 'depense', 'persistance', function(
         if (i > -1) {
             $scope.depenses.splice(i, 1);            
         }
+        
+        totaux();
         
         sauver();
     }
