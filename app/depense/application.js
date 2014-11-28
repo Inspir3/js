@@ -1,7 +1,9 @@
-var m = angular.module('application', ['inspir3']);
+var m = angular.module('application', ['inspir3', 'ngTagsInput']);
 
 m.controller('DepenseControleur', ['$scope', 'depense', 'persistance', function($scope, depense, persistance) {
-        
+
+    var depenses = [];
+    var tags = [];
     $scope.depenses = [];
     
     /*
@@ -14,44 +16,60 @@ m.controller('DepenseControleur', ['$scope', 'depense', 'persistance', function(
         
         for(var i=0;i<$scope.depenses.length;i++){  
             $scope.totalAchat += parseFloat($scope.depenses[i].achat);
-            $scope.totalVente += parseFloat($scope.depenses[i].vente);
+            
+            if ($scope.depenses[i].vente != ""){
+                $scope.totalVente += parseFloat($scope.depenses[i].vente);
+            }
         }
         
         $scope.difference = $scope.totalAchat - $scope.totalVente;
-        $scope.perte = ($scope.totalAchat / $scope.totalVente - 1)*100;
+        $scope.perte = 100 - ($scope.totalVente/$scope.totalAchat)*100;
     }
     
     persistance.charger('data', function (Data){
         
-       $scope.depenses = Data; 
-       
+        depenses = Data; 
+        
+        //depenses.push(depense.creer(depense.idSuivant(depenses), '2014-11-28T00:00:00.000Z', 'Aileron', 'Remy', 150, 120, 1530, ['windsurf', 'aileron']));
+        //depenses.push(depense.creer(depense.idSuivant(depenses), '2014-11-28T00:00:00.000Z', 'Switchblade', 'Win33', 390, 250, 6530, ['windsurf']));
+               
+        $scope.depenses = depenses;
+        
         totaux();
-    });
-    
+    });    
+
     /*
-     * Retourne un id disponible
+     *
      */
-    var idSuivant = function(){
+    var tagsVersTableau = function(Tags){
         
-        if ($scope.depenses.length == 0) return 1;
+        var ret = [];
         
-        return $scope.depenses[$scope.depenses.length-1].id + 1;        
-    }
-    
-    /*
-     * Retourne la position d'une dépense dans le tableau
-     */
-    var index = function(DepenseId){
-        
-        for(var i=0;i<$scope.depenses.length;i++){
-            if ($scope.depenses[i].id == DepenseId){
-                return i;
-            }
+        for(var i=0;i<Tags.length;i++){
+            ret.push(Tags[i].text);
         }
         
-        return -1;        
+        return ret;
     }
-
+    
+    /*
+     * 
+     */
+    $scope.filtre = function(){
+        
+        tags = tagsVersTableau($scope.tags);
+        
+        console.log(tags);
+        
+        if (tags.length > 0){
+            $scope.depenses = depense.filtre(depenses, tags);
+        }else{
+            $scope.depenses = depenses;
+        }
+        
+        totaux();
+    }
+                                   
     /*
      * Sauvegarde les données sur le serveur
      */
@@ -59,12 +77,13 @@ m.controller('DepenseControleur', ['$scope', 'depense', 'persistance', function(
 
         $scope.message = 'Sauvegarde...';
         
-        var json = angular.toJson($scope.depenses);
+        console.log(depenses);
+        var json = angular.toJson(depenses);
         console.log(json);
-				
+		
         persistance.sauvegarder('data', json, function (){
             $scope.message = '';            
-        });          
+        });
     }
             
     /*
@@ -73,10 +92,10 @@ m.controller('DepenseControleur', ['$scope', 'depense', 'persistance', function(
     $scope.ajouter = function() {
         console.log('ajouter()');
              
-        $scope.depenses.push(depense.creer(idSuivant(), $scope.date, $scope.description, $scope.achat, $scope.vente, $scope.poids));
+        depenses.push(depense.creer(depense.idSuivant(depenses), $scope.date, $scope.description, $scope.source, $scope.achat, $scope.vente, $scope.poids, tags));
         
-        totaux();
-        
+        $scope.filtre();
+        totaux();        
         sauver();        
     }
     
@@ -86,14 +105,14 @@ m.controller('DepenseControleur', ['$scope', 'depense', 'persistance', function(
     $scope.supprimer = function(Id){
         console.log('supprimer(' + Id + ')');
         
-        var i = index(Id);
+        var i = depense.index(depenses, Id);
                 
         if (i > -1) {
-            $scope.depenses.splice(i, 1);            
+            depenses.splice(i, 1);            
         }
         
-        totaux();
-        
+        $scope.filtre();
+        totaux();        
         sauver();
     }
     

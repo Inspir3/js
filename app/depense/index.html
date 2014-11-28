@@ -5,33 +5,42 @@
     <title>Inspir3 - Dépense</title>
     
     <link rel="stylesheet" href="../../css/bootstrap.min.css">
+    <link rel="stylesheet" href="../../css/ng-tags-input.min.css">
+    <link rel="stylesheet" href="../../css/ng-tags-input.bootstrap.min.css">
     
     <script src="../../lib/angular-1.3.4.min.js"></script>
     <script src="../../lib/angular-route-1.3.4.min.js"></script>
+    <script src="../../lib/ng-tags-input.min.js"></script>
     <script src="depense/application.js"></script>
     <script src="depense/modele.js"></script>
     <script src="inspir3.js"></script>
 </head>
 <body>
     
-    <div ng-controller="DepenseControleur" class="col-md-7">
+    <div ng-controller="DepenseControleur" class="col-md-8">
       
         <hr>
         
         <span class="help-inline">{{message}}</span>
-               
-        <div>
-            <form ng-submit="ajouter()">
-                                
+                
+        <div class="input-group">
+            <span class="input-group-addon">Filtre</span>
+            <tags-input ng-model="tags" add-on-space="true" on-tag-added="filtre()" on-tag-removed="filtre()"></tags-input>
+        </div>
+        
+        <hr>
+        
+        <form ng-submit="ajouter()">
+
                 <input type="date" ng-model="date" placeholder="Date" class="input-sm">
                 <input type="text" ng-model="description" placeholder="Description">
+                <input type="text" ng-model="source" placeholder="Source">
                 <input type="text" ng-model="achat" placeholder="Montant d'achat">
                 <input type="text" ng-model="vente" placeholder="Montant de vente">
                 <input type="text" ng-model="poids" placeholder="Poids">
-        
-                <button class="btn btn-primary" type="submit">Ajouter</button>
-            </form>       
-        </div>                
+
+            <button class="btn btn-primary" type="submit">Ajouter</button>
+        </form>       
         
         <h2>Totaux</h2>
         
@@ -53,12 +62,12 @@
         <table class="table table-striped">
             <thead>
                 <tr>
-                    <th>Date</th><th>Description</th><th>Achat</th><th>Vente</th><th>Poids</th>
+                    <th>Date</th><th>Description</th><th>Source</th><th>Achat</th><th>Vente</th><th>Poids</th><th>Tags</th><th>Actions</th>
                 </tr>
             </thead>
             <tbody>
                 <tr ng-repeat="depense in depenses">
-                    <td>{{depense.date | date: 'dd-MM-yyyy'}}</td><td>{{depense.description}}</td><td>{{depense.achat}}</td><td>{{depense.vente}}</td><td>{{depense.poids}}</td><td><a href="" ng-click="supprimer(depense.id)">X</a></td>
+                    <td>{{depense.date | date: 'dd-MM-yyyy'}}</td><td>{{depense.description}}</td><td>{{depense.source}}</td><td>{{depense.achat}}</td><td>{{depense.vente}}</td><td>{{depense.poids}}</td><td>{{depense.tags}}</td><td><a href="" ng-click="supprimer(depense.id)">X</a></td>
                 </tr>
             </tbody>
         </table>
