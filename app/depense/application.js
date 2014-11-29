@@ -1,9 +1,9 @@
 var m = angular.module('application', ['inspir3', 'ngTagsInput']);
 
-m.controller('DepenseControleur', ['$scope', 'depense', 'persistance', function($scope, depense, persistance) {
+m.controller('DepenseControleur', ['$scope', 'Depense', 'Persistance', 'Liste', function($scope, Depense, Persistance, Liste) {
 
-    var depenses = [];
-    var tags = [];
+    var depenses    = [];
+    var tags        = [];
     $scope.depenses = [];
     
     /*
@@ -26,12 +26,12 @@ m.controller('DepenseControleur', ['$scope', 'depense', 'persistance', function(
         $scope.perte = 100 - ($scope.totalVente/$scope.totalAchat)*100;
     }
     
-    persistance.charger('data', function (Data){
+    Persistance.charger('data', function (Data){
         
         depenses = Data; 
         
-        //depenses.push(depense.creer(depense.idSuivant(depenses), '2014-11-28T00:00:00.000Z', 'Aileron', 'Remy', 150, 120, 1530, ['windsurf', 'aileron']));
-        //depenses.push(depense.creer(depense.idSuivant(depenses), '2014-11-28T00:00:00.000Z', 'Switchblade', 'Win33', 390, 250, 6530, ['windsurf']));
+        //depenses.push(Depense.creer(Liste.idSuivant(depenses), '2014-11-28T00:00:00.000Z', 'Aileron', 'Remy', 150, 120, 1530, ['windsurf', 'aileron']));
+        //depenses.push(Depense.creer(Liste.idSuivant(depenses), '2014-11-28T00:00:00.000Z', 'Switchblade', 'Win33', 390, 250, 6530, ['windsurf']));
                
         $scope.depenses = depenses;
         
@@ -62,7 +62,7 @@ m.controller('DepenseControleur', ['$scope', 'depense', 'persistance', function(
         console.log(tags);
         
         if (tags.length > 0){
-            $scope.depenses = depense.filtre(depenses, tags);
+            $scope.depenses = Liste.filtreParTags(depenses, tags);
         }else{
             $scope.depenses = depenses;
         }
@@ -81,7 +81,7 @@ m.controller('DepenseControleur', ['$scope', 'depense', 'persistance', function(
         var json = angular.toJson(depenses);
         console.log(json);
 		
-        persistance.sauvegarder('data', json, function (){
+        Persistance.sauvegarder('data', json, function (){
             $scope.message = '';            
         });
     }
@@ -92,7 +92,7 @@ m.controller('DepenseControleur', ['$scope', 'depense', 'persistance', function(
     $scope.ajouter = function() {
         console.log('ajouter()');
              
-        depenses.push(depense.creer(depense.idSuivant(depenses), $scope.date, $scope.description, $scope.source, $scope.achat, $scope.vente, $scope.poids, tags));
+        depenses.push(Depense.creer(Liste.idSuivant(depenses), $scope.date, $scope.description, $scope.source, $scope.achat, $scope.vente, $scope.poids, tags));
         
         $scope.filtre();
         totaux();        
@@ -105,7 +105,7 @@ m.controller('DepenseControleur', ['$scope', 'depense', 'persistance', function(
     $scope.supprimer = function(Id){
         console.log('supprimer(' + Id + ')');
         
-        var i = depense.index(depenses, Id);
+        var i = Liste.index(depenses, Id);
                 
         if (i > -1) {
             depenses.splice(i, 1);            

@@ -1,6 +1,9 @@
 var m = angular.module('inspir3', []);
 
-m.factory('persistance', ['$http', function($http) {
+//---------------------------------------------------------------------------------------------------------------------------
+//Module Persistance
+//---------------------------------------------------------------------------------------------------------------------------
+m.factory('Persistance', ['$http', function($http) {
 
     var url = 'http://www.inspir3.org/php/data.php?callback=JSON_CALLBACK';
         
@@ -54,3 +57,82 @@ m.factory('persistance', ['$http', function($http) {
     }
     
 }]);
+
+//---------------------------------------------------------------------------------------------------------------------------
+//Module Liste
+//---------------------------------------------------------------------------------------------------------------------------
+m.factory('Liste', function() {
+
+    /*
+     * Retourne un id disponible
+     */
+    var idSuivant = function(Liste){
+        
+        if (Liste.length == 0) return 1;
+        
+        return Liste[Liste.length-1].id + 1;        
+    }
+    
+    /*
+     * Retourne la position d'une dépense dans le tableau
+     */
+    var index = function(Liste, Id){
+        
+        for(var i=0;i<Liste.length;i++){
+            if (Liste[i].id == Id){
+                return i;
+            }
+        }
+        
+        return -1;        
+    }
+    
+    /*
+     * Indique si l'objet contient le tag
+     */
+    var objetContientCeTag = function(Objet, Tag){
+
+        for(var i=0;i<Objet.tags.length;i++){
+            if (Objet.tags[i] == Tag) return true;
+        }
+        
+        return false;
+    }
+          
+    /*
+     * Indique si l'objet contient tous ces tags
+     */
+    var objetContientTousCesTags = function(Objet, Tags){
+        
+        var cpt = 0;
+        
+        for(var i=0;i<Tags.length;i++){
+            if (objetContientCeTag(Objet, Tags[i])) cpt++;
+        }
+                
+        return (cpt == Tags.length);
+    }
+
+    /*
+     * Retourne la position d'une dépense dans le tableau
+     */
+    var filtreParTags = function(Liste, Tags){
+        
+        var ret = [];
+        
+        for(var i=0;i<Liste.length;i++){
+            if (objetContientTousCesTags(Liste[i], Tags)){
+                ret.push(Liste[i]);
+            }
+        }
+        
+        return ret;        
+    }
+    
+    return {
+        idSuivant: idSuivant,
+        index: index,
+        filtreParTags: filtreParTags
+    }
+    
+});
