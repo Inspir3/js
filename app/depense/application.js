@@ -15,11 +15,10 @@ m.controller('DepenseControleur', ['$scope', 'Depense', 'Persistance', 'Liste', 
         $scope.totalVente = 0;
         
         for(var i=0;i<$scope.depenses.length;i++){  
-            $scope.totalAchat += parseFloat($scope.depenses[i].achat);
+            console.log('achat: ' + $scope.depenses[i].achat + ', vente: ' + $scope.depenses[i].vente);
             
-            if ($scope.depenses[i].vente != ""){
-                $scope.totalVente += parseFloat($scope.depenses[i].vente);
-            }
+            if ( ($scope.depenses[i].achat != "") && ($scope.depenses[i].achat != undefined) ) $scope.totalAchat += parseFloat($scope.depenses[i].achat);
+            if ( ($scope.depenses[i].vente != "") && ($scope.depenses[i].vente != undefined) ) $scope.totalVente += parseFloat($scope.depenses[i].vente);
         }
         
         $scope.difference = $scope.totalAchat - $scope.totalVente;
