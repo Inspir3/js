@@ -5,9 +5,10 @@ var m = angular.module('inspir3', []);
  */
 m.factory('Persistance', ['$http', function($http) {
 
-	var url = 'http://localhost/php/data.php?callback=JSON_CALLBACK';
+	//var url = 'http://localhost/php/data.php?callback=JSON_CALLBACK';
+	var url = 'http://www.inspir3.org/php/data.php?callback=JSON_CALLBACK';
         
-  var application = 'test1';
+  var application = 'depense';
   
   /*
    * Sauvegarde une structure complète JSON

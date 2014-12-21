@@ -25,7 +25,7 @@ m.controller('DepenseControleur', ['$scope', 'Depense', 'Persistance', 'Liste', 
         $scope.perte = 100 - ($scope.totalVente/$scope.totalAchat)*100;
     }
     
-    Persistance.charger('data', function (Data){
+    Persistance.chargement('data', function (Data){
         
         depenses = Data; 
         
@@ -80,8 +80,8 @@ m.controller('DepenseControleur', ['$scope', 'Depense', 'Persistance', 'Liste', 
         var json = angular.toJson(depenses);
         console.log(json);
 		
-        Persistance.sauvegarder('data', json, function (){
-            $scope.message = '';            
+        Persistance.sauvegarde('data', json, function (){
+            $scope.message = 'Sauvegarde... OK';            
         });
     }
             
@@ -91,11 +91,18 @@ m.controller('DepenseControleur', ['$scope', 'Depense', 'Persistance', 'Liste', 
     $scope.ajouter = function() {
         console.log('ajouter()');
              
-        depenses.push(Depense.creer(Liste.idSuivant(depenses), $scope.date, $scope.description, $scope.source, $scope.achat, $scope.vente, $scope.poids, tags));
+        var obj = Depense.creer(Liste.idSuivant(depenses), $scope.date, $scope.description, $scope.source, $scope.achat, $scope.vente, $scope.poids, tags);
+        depenses.push(obj);
         
         $scope.filtre();
         totaux();        
-        sauver();        
+        //sauver();        
+        
+        $scope.message = 'Ajout...';
+      
+        Persistance.ajout('data', obj, function (){
+            $scope.message = 'Ajout... OK';            
+        });
     }
     
     /*
@@ -112,7 +119,13 @@ m.controller('DepenseControleur', ['$scope', 'Depense', 'Persistance', 'Liste', 
         
         $scope.filtre();
         totaux();        
-        sauver();
+        //sauver();
+        
+        $scope.message = 'Suppression...';
+      
+        Persistance.suppression('data', { id: Id }, function (){
+            $scope.message = 'Suppression... OK';            
+        });
     }
     
 }]);
