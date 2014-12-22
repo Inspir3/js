@@ -26,13 +26,14 @@ m.controller('DepenseControleur', ['$scope', 'Depense', 'Persistance', 'Liste', 
     }
     
     Persistance.chargement('data', function (Data){
-        
-        depenses = Data; 
-        
+
         //depenses.push(Depense.creer(Liste.idSuivant(depenses), '2014-11-28T00:00:00.000Z', 'Aileron', 'Remy', 150, 120, 1530, ['windsurf', 'aileron']));
         //depenses.push(Depense.creer(Liste.idSuivant(depenses), '2014-11-28T00:00:00.000Z', 'Switchblade', 'Win33', 390, 250, 6530, ['windsurf']));
-               
-        $scope.depenses = depenses;
+        
+        if (Data != ""){
+        	depenses = Data; 
+	        $scope.depenses = depenses;
+        }
         
         totaux();
     });    
