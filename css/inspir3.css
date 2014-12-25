@@ -1,0 +1,32 @@
+/*
+ * Composant tag.js
+ */
+
+ul[class=Tag]{
+  display: inline;
+  list-style-type: none;  
+  margin: 0;
+  padding: 0;
+}
+
+ul[class=Tag] > li{
+  display: inline;
+  margin-left: 0.2em;  
+  padding: 0.2em;
+  color: white;
+  border: 1px #357EBD solid;
+  border-radius: 4px;
+  background-color: #428BCA;
+  
+}
+
+ul[class=Tag] > li > a{
+  color: #585858;
+  font-family: cursive;
+}
+
+ul[class=Tag] > li > a:hover{
+  cursor: pointer;
+  color: red;
+}
+

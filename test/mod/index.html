@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html ng-app="test">
+  <head>
+    <meta charset="utf-8">
+    <title>Test des modules</title>
+    
+    <script src="../../lib/angular-1.3.4.min.js"></script>    
+    <script src="application.js"></script>
+      
+    <script src="../../mod/inspir3.js"></script>
+    <script src="../../mod/tag.js"></script>
+  
+    <link rel="stylesheet" href="../../css/inspir3.css">
+  </head>
+<body>
+    
+	<div ng-controller="TestControleur">
+        
+    <tag ng-model="tags" ng-change="changementDesTags()"></tag>
+                                            
+	</div>    
+    
+</body>
+</html>
