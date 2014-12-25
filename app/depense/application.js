@@ -1,9 +1,8 @@
-var m = angular.module('application', ['inspir3', 'ngTagsInput']);
+var m = angular.module('application', ['inspir3']);
 
-m.controller('DepenseControleur', ['$scope', 'Depense', 'Persistance', 'Liste', function($scope, Depense, Persistance, Liste) {
+m.controller('DepenseControleur', ['$scope', 'Depense', 'persistance', 'Liste', function($scope, Depense, Persistance, Liste) {
 
     var depenses    = [];
-    var tags        = [];
     $scope.depenses = [];
     
     /*
@@ -15,7 +14,7 @@ m.controller('DepenseControleur', ['$scope', 'Depense', 'Persistance', 'Liste', 
         $scope.totalVente = 0;
         
         for(var i=0;i<$scope.depenses.length;i++){  
-            console.log('achat: ' + $scope.depenses[i].achat + ', vente: ' + $scope.depenses[i].vente);
+            //console.log('achat: ' + $scope.depenses[i].achat + ', vente: ' + $scope.depenses[i].vente);
             
             if ( ($scope.depenses[i].achat != "") && ($scope.depenses[i].achat != undefined) ) $scope.totalAchat += parseFloat($scope.depenses[i].achat);
             if ( ($scope.depenses[i].vente != "") && ($scope.depenses[i].vente != undefined) ) $scope.totalVente += parseFloat($scope.depenses[i].vente);
@@ -38,30 +37,12 @@ m.controller('DepenseControleur', ['$scope', 'Depense', 'Persistance', 'Liste', 
     });    
 
     /*
-     *
-     */
-    var tagsVersTableau = function(Tags){
-        
-        var ret = [];
-        
-        for(var i=0;i<Tags.length;i++){
-            ret.push(Tags[i].text);
-        }
-        
-        return ret;
-    }
-    
-    /*
      * 
      */
     $scope.filtre = function(){
-        
-        tags = tagsVersTableau($scope.tags);
-        
-        console.log(tags);
-        
-        if (tags.length > 0){
-            $scope.depenses = Liste.filtreParTags(depenses, tags);
+              
+        if ($scope.tags.length > 0){
+            $scope.depenses = Liste.filtreParTags(depenses, $scope.tags);
         }else{
             $scope.depenses = depenses;
         }
@@ -91,12 +72,11 @@ m.controller('DepenseControleur', ['$scope', 'Depense', 'Persistance', 'Liste', 
     $scope.ajouter = function() {
         console.log('ajouter()');
              
-        var obj = Depense.creer(Liste.idSuivant(depenses), $scope.date, $scope.description, $scope.source, $scope.achat, $scope.vente, $scope.poids, tags);
+        var obj = Depense.creer(Liste.idSuivant(depenses), $scope.date, $scope.description, $scope.source, $scope.achat, $scope.vente, $scope.poids, $scope.tags);
         depenses.push(obj);
         
         $scope.filtre();
         totaux();        
-        //sauver();        
         
         $scope.message = 'Ajout...';
       
@@ -119,7 +99,6 @@ m.controller('DepenseControleur', ['$scope', 'Depense', 'Persistance', 'Liste', 
         
         $scope.filtre();
         totaux();        
-        //sauver();
         
         $scope.message = 'Suppression...';
       
